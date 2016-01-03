@@ -12,18 +12,24 @@ EMACS_FOLDER_DEST=${HOME_USER}/.emacs.d
 EMACS_FILE_SOURCE=${CONFIG_FOLDER}/.emacs
 EMACS_FILE_DEST=${HOME_USER}/.emacs
 
+if command -v vim > /dev/null; then
+	echo "Already have vim installed and added to PATH"
+else
+	echo "No vim found in PATH, installing it now...."
+	apt-get -y install vim > /dev/null
+fi
+
 if command -v emacs > /dev/null; then
 	echo "Already have emacs installed and added to PATH"
 else
 	echo "No emacs found in PATH, installing it now...."
-	apt-get -y install emacs
+	apt-get -y install emacs > /dev/null
 fi
 
 if [ ! -d ${CONFIG_FOLDER} ]; then
     sudo -u vagrant mkdir -p ${CONFIG_FOLDER}
+	git clone https://github.com/vuhonganh/personal_config.git ${CONFIG_FOLDER}
 fi
-
-git clone https://github.com/vuhonganh/personal_config.git ${CONFIG_FOLDER}
 
 if [ ! -d ${EMACS_FOLDER_DEST} ]; then	
 	sudo -u vagrant cp -r ${EMACS_FOLDER_SOURCE} ${EMACS_FOLDER_DEST}
@@ -38,5 +44,3 @@ else
 fi
 
 printf "\n\e[1;33m%s\e[0m\n" "DONE executing personal_config.sh file......."
-
-
